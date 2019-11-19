@@ -1,0 +1,324 @@
+openapi: 3.0.0
+info:
+    title: practica 1
+    description: practica API REST para ADI
+    version: 1.0.0
+servers:
+    - url: http://localhost:3000/api
+components:
+  responses:
+    UnauthorizedError:
+      description: 'Token inválido o no se encuentra'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+      /usuarios:
+        get:
+          summary: Devuelve todos los usuarios
+          description: Devuelve los nombres de todos los usuarios ordenadores por orden descendiente de popularidad
+          responses:
+            '200':
+              description: un array en JSON de nombres de usuario
+              content:
+                application/json:
+                  schema: 
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        nombre: 
+                          type: string
+                        popularidad: 
+                          type: integer
+            '500':
+              description: error interno
+      /usuarios/{nombre}:
+        put:
+          security:
+            - bearerAuth: []
+          summary: Actualizar información usuario
+          description: El usuario autenticado puede actualizar su alias y/o popularidad
+          parameters:
+            - name: nombre
+              in: path
+              required: true
+              description: nombre del usuario a actualizar
+              schema:
+                type: string
+          requestBody:
+            description: alias y/o popularidad a actualizar
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    alias:
+                      type: string
+                    popularidad:
+                      type: integer
+          responses:
+            '204':
+              description: Información actualizada
+            '400':
+              description: No has dado información que actualizar
+            '401':
+              $ref: '#/components/responses/UnauthorizedError'
+            '403':
+              description: Solo puedes actualizar la información de tu usuario o el usuario no existe
+            '500':
+              description: Error interno
+      /grupos:
+        post:
+          security:
+            - bearerAuth: []
+          summary: Crea un grupo
+          description: Con el nombre dado en el body, crea un grupo
+          requestBody:
+            description: nombre del grupo
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string                          
+          responses:
+            '201':
+              description: OK
+              headers:
+               Location:
+                 schema:
+                   type: string
+                   description: url grupo
+            '401':
+              $ref: '#/components/responses/UnauthorizedError'
+            '400':
+              description: Se necesita un nombre
+            '500':
+              description: Error interno
+
+        get:
+          summary: Devuelve todos los grupos
+          description: Devuelve toda la información de los grupos
+          responses:
+            '200':
+              description: Array JSON de objetos grupo
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nombre:
+                          type: string
+            '500':
+              description: Error interno               
+
+      /publicaciones:
+        get:
+          summary: Devuelve todas las publicaciones
+          description: Devuelve toda la información de las publicaciones
+          responses:
+            '200':
+              description: un array de objetos publicación en JSON
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        titulo:
+                          type: string
+                        contenido:
+                          type: string
+                        autor_id:
+                          type: string
+            '500':
+              description: Error interno
+                    
+                      
+      /publicaciones/{idPublicacion}:
+        get:
+          summary: Devuelve una publicacion
+          description: Devuelve toda la información de la publicación pedida
+          parameters:
+            - name: idPublicacion
+              in: path
+              required: true
+              description: id de la publicación de la que listar sus comentarios
+              schema:
+                type: integer
+          responses:
+            '200':
+              description: un objeto en JSON de publicación
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      titulo:
+                        type: string
+                      contenido:
+                        type: string
+                      autor_id:
+                        type: string                
+            '404':
+              description: No existe publicación con id idPublicacion
+            '500':
+              description: Error interno
+        delete:
+          security:
+            - bearerAuth: []
+          summary: Borra una publicación
+          description: Borra la publicación deseada a la vez que todos los comentarios de esta
+          parameters:
+            - name: idPublicacion
+              in: path
+              required: true
+              description: id de la publicación de la que listar sus comentarios
+              schema:
+                type: integer
+          responses:
+            '204':
+              description: publicacion borrada
+            '401':
+              $ref: '#/components/responses/UnauthorizedError'
+            '403':
+              description: solo el autor puede borrar la publicación
+            '404':
+              description: la publicación no existe
+            '500': 
+              description: Error interno
+      /publicaciones/{idPublicacion}/comentarios:
+        get:
+          summary: Lista de comentarios de una publicación
+          description: Devuelve una lista de comentarios con el contenido de este y el usuario que lo ha escrito
+          parameters:
+            - name: idPublicacion
+              in: path
+              required: true
+              description: id de la publicación de la que listar sus comentarios
+              schema:
+                type: integer
+          responses:
+            '200':
+              description: un array en JSON de comentarios
+              content:
+                application/json:
+                  schema: 
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        contenido:
+                          type: string
+                        usuario_id:
+                          type: integer
+            '404':
+              description: No existe publicación con id idPublicacion
+            '500':
+              description: Error interno
+        delete:
+          security:
+            - bearerAuth: []
+          summary: Borra comentarios de una publicación
+          description: Borra todos los comentarios de la publicación
+          parameters:
+           - name: idPublicacion
+             in: path
+             required: true
+             description: id de la publicación de la que listar sus comentarios
+             schema:
+               type: integer
+          responses:
+            '204':
+              description: Comentarios borrados para publicacion idPublicacion
+            '401':
+              $ref: '#/components/responses/UnauthorizedError'
+            '403':
+              description: Solo el autor puede eliminar los comentarios de su publicación
+            '404':
+              description: la publicacion no existe
+
+        post:
+          security:
+            - bearerAuth: []
+          summary: Añadir comentario
+          description: El usuario autenticado añade un comentario a la publicación deseada
+          parameters:
+           - name: idPublicacion
+             in: path
+             required: true
+             description: id de la publicación de la que listar sus comentarios
+             schema:
+               type: integer
+          requestBody:
+            required: true
+            description: comentario
+            content:
+              application/json:
+                schema: 
+                  type: string
+          responses:
+            '201':
+              description: comentario agregado
+              headers:
+                Location:
+                  schema:
+                    type: string
+                    description: url comentario
+            '400':
+              description: Comentario no puede ser vacío
+            '401':
+              $ref: '#/components/responses/UnauthorizedError'
+            '404':
+              description: No existe publicación con ese id
+            '500':
+              description: Error interno
+      /login:
+        post:
+          summary: Login Usuario
+          description: Autentica al usuario usando su nombre y password, devolviendo un JWT si se ha podido autenticar
+          requestBody:
+            description: Usuario y password a autenticar
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string
+                    password:
+                      type: string
+          responses:
+            '200':    # status code
+              description: un JWT con el nombre del usuario
+              content:
+                application/json:
+                  schema: 
+                    type: string
+            '404':
+              description: Contraseña incorrecta o usuario no encontrado
+            '500':
+              description: Error interno
+
+
+        
+            
+            

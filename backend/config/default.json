@@ -1,0 +1,7 @@
+{"db": {
+    "user": "ua",
+    "host": "localhost",
+    "database": "adi_prueba",
+    "password": "1234",
+    "port": 5432
+}}

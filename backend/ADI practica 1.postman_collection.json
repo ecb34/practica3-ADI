@@ -1,0 +1,1406 @@
+{
+	"info": {
+		"_postman_id": "94fa3c66-636e-499b-994e-ad31a9f41db1",
+		"name": "ADI practica 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login correcto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6684b44-5c19-4f56-8f70-c71804681df9",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"token\" : { \"type\": \"string\" },\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nombre\": \"user\",\n\t\"password\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/login",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login incorrecto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "978ce501-9a95-44b3-bc8e-292cdc3c2a58",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Incorrect Password\", function() {\r",
+							"    pm.response.to.have.body('{\"error\":\"Contraseña incorrecta\"}');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nombre\": \"user\",\n\t\"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/login",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUsuarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a1f6c32c-80b0-4450-8a2f-14a7ae7b4db1",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"   \"type\": \"array\",\r",
+							"   \"items\": { \"$ref\": \"usuarioSchema\" }\r",
+							"};\r",
+							"\r",
+							"var usuarioSchema = {\r",
+							"   \"properties\": {\r",
+							"       \"nombre\" : { \"type\": \"string\" },\r",
+							"       \"popularidad\": { \"type\": \"integer\" },\r",
+							"   }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('usuarioSchema', usuarioSchema);\r",
+							"\r",
+							"pm.test('Usuario schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/usuarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUsuario 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4aeed41-e533-4148-ae0a-b894103d04e8",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.success; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"ok\" : { \"type\": \"string\" },\r",
+							"    \"alias\": {\"type\": \"string\"},\r",
+							"    \"popularidad\": {\"type\": \"string\"}\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have ok, alias and popularidad\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"ok\");\r",
+							"    pm.response.to.have.jsonBody(\"alias\");\r",
+							"    pm.response.to.have.jsonBody(\"popularidad\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"alias\": \"usuario\",\n\t\"popularidad\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/usuarios/user",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUsuario 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4aeed41-e533-4148-ae0a-b894103d04e8",
+						"exec": [
+							"pm.test(\"Payload must be badRequest and have a body\", function () { \r",
+							"     pm.response.to.be.badRequest; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"No has dado información que actualizar\"}')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/usuarios/user",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUsuario 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c4aeed41-e533-4148-ae0a-b894103d04e8",
+						"exec": [
+							"pm.test(\"Payload must be forbidden and have a body\", function () { \r",
+							"     pm.response.to.be.forbidden; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"Solo puedes actualizar la información de tu usuario o el usuario no existe\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"alias\": \"usuario\",\n\t\"popularidad\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/usuarios/Gaston",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"usuarios",
+						"Gaston"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addGroup 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e80a1df-5ff1-4eda-8bc4-05482a811bf2",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.success; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.response.to.have.header(\"Location\")\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"ok\" : { \"type\": \"string\" },\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have ok\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"ok\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nombre\": \"gryffindor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/grupos",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"grupos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addGroup 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e80a1df-5ff1-4eda-8bc4-05482a811bf2",
+						"exec": [
+							"pm.test(\"Payload must be badRequest and have a body\", function () { \r",
+							"     pm.response.to.be.badRequest; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"Se necesita un nombre\"}')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nomb\": \"gryffindor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/grupos",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"grupos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addGroup 401 (no token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e80a1df-5ff1-4eda-8bc4-05482a811bf2",
+						"exec": [
+							"pm.test(\"Payload must be unautorhized and have a body\", function () { \r",
+							"     pm.response.to.be.unauthorized; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"token no válido\"}')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "m4lt0ken"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nomb\": \"gryffindor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/grupos",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"grupos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPublicaciones",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "58fd9bd1-f031-4730-a466-d7dd3b5755f6",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"   \"type\": \"array\",\r",
+							"   \"items\": { \"$ref\": \"publicacionSchema\" }\r",
+							"};\r",
+							"\r",
+							"var publicacionSchema = {\r",
+							"   \"properties\": {\r",
+							"       \"id\" : { \"type\": \"integer\" },\r",
+							"       \"titulo\": { \"type\": \"string\" },\r",
+							"       \"contenido\": { \"type\": \"string\" },\r",
+							"       \"autor_id\": { \"type\": \"integer\" },\r",
+							"       \"imagen\": { \"type\": \"string\" },\r",
+							"   }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('publicacionSchema', publicacionSchema);\r",
+							"\r",
+							"pm.test('Publicacion schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPublicacion 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "180663e0-99ab-45f9-9ca4-d1c20a9be391",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"   \"type\": \"array\",\r",
+							"   \"items\": { \"$ref\": \"publicacionSchema\" }\r",
+							"};\r",
+							"\r",
+							"var publicacionSchema = {\r",
+							"   \"properties\": {\r",
+							"       \"id\" : { \"type\": \"integer\" },\r",
+							"       \"titulo\": { \"type\": \"string\" },\r",
+							"       \"contenido\": { \"type\": \"string\" },\r",
+							"       \"autor_id\": { \"type\": \"integer\" },\r",
+							"       \"imagen\": { \"type\": \"string\" },\r",
+							"   }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('publicacionSchema', publicacionSchema);\r",
+							"\r",
+							"pm.test('Publicacion schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"  pm.expect(Object.keys(pm.response.json()).length).to.eql(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/2",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPublicacion 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "180663e0-99ab-45f9-9ca4-d1c20a9be391",
+						"exec": [
+							"pm.test(\"Payload must be notFound and have a body\", function () { \r",
+							"     pm.response.to.be.notFound; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"No existe publicación con id 35\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/35",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"35"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePublicacion 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ca21df5b-a0cb-40b7-a0b5-7a20e8dc26d3",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.success; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"ok\" : { \"type\": \"string\" },\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have ok\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"ok\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/1",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePublicacion 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ca21df5b-a0cb-40b7-a0b5-7a20e8dc26d3",
+						"exec": [
+							"pm.test(\"Payload must be forbidden and have a body\", function () { \r",
+							"     pm.response.to.be.forbidden; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"solo el autor puede borrar la publicación\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/20",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePublicacion 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ca21df5b-a0cb-40b7-a0b5-7a20e8dc26d3",
+						"exec": [
+							"pm.test(\"Payload must be notFound and have a body\", function () { \r",
+							"     pm.response.to.be.notFound; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"No existe publicación con id 35\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/35",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"35"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getComentarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f8806bd2-aa2a-4f13-a9d1-ee77d353295a",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"   \"type\": \"array\",\r",
+							"   \"items\": { \"$ref\": \"comentarioSchema\" }\r",
+							"};\r",
+							"\r",
+							"var comentarioSchema = {\r",
+							"   \"properties\": {\r",
+							"       \"usuario_id\" : { \"type\": \"integer\" },\r",
+							"       \"contenido\": { \"type\": \"string\" }\r",
+							"   }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('comentarioSchema', comentarioSchema);\r",
+							"\r",
+							"pm.test('Comentario schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/2/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"2",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteComentarios 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5e2b439-0b56-46d2-8eb8-e3dbffdcb742",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.success; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"ok\" : { \"type\": \"string\" },\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have ok\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"ok\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/1/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"1",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteComentarios 403",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5e2b439-0b56-46d2-8eb8-e3dbffdcb742",
+						"exec": [
+							"pm.test(\"Payload must be forbidden and have a body\", function () { \r",
+							"     pm.response.to.be.forbidden; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"Solo el autor puede borrar todos los comentarios de su publicación\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/20/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"20",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteComentarios 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b5e2b439-0b56-46d2-8eb8-e3dbffdcb742",
+						"exec": [
+							"pm.test(\"Payload must be notFound and have a body\", function () { \r",
+							"     pm.response.to.be.notFound; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"No existe publicación con id 35\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/1/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"1",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getGroups",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10f1a8c4-6d67-44ce-bf8b-36bbc6b9e656",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.ok; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"   \"type\": \"array\",\r",
+							"   \"items\": { \"$ref\": \"GroupSchema\" }\r",
+							"};\r",
+							"\r",
+							"var GroupSchema = {\r",
+							"   \"properties\": {\r",
+							"       \"id\" : { \"type\": \"integer\" },\r",
+							"       \"nombre\": { \"type\": \"string\" }\r",
+							"   }\r",
+							"};\r",
+							"\r",
+							"tv4.addSchema('GroupSchema', GroupSchema);\r",
+							"\r",
+							"pm.test('Group schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/grupos",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"grupos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addComentario 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44802d23-547f-4f67-b7b8-b122a7a29930",
+						"exec": [
+							"pm.test(\"Payload must be valid and have a body\", function () { \r",
+							"     pm.response.to.be.success; // equivalente a decir que valide que sea 201\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type and location is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.response.to.have.header(\"Location\")\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    \"ok\" : { \"type\": \"string\" },\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have ok\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"ok\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{tokenAuth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"comentario\": \"prueba\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/2/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"2",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addComentario 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f867b06-a382-4e2c-8900-05ffff8e7369",
+						"exec": [
+							"pm.test(\"Payload must be badRequest and have a body\", function () { \r",
+							"     pm.response.to.be.badRequest; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"Comentario no puede ser vacío\"}')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"comentario\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/2/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"2",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addComentario 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f867b06-a382-4e2c-8900-05ffff8e7369",
+						"exec": [
+							"pm.test(\"Payload must be notFound and have a body\", function () { \r",
+							"     pm.response.to.be.notFound; // equivalente a decir que valide que sea 200\r",
+							"     pm.response.to.be.withBody; // body tiene que exitir\r",
+							"     pm.response.to.be.json; // además que sea un JSON válido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json body have error\", function () {\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.body('{\"error\":\"No existe publicación con id 35\"}')\r",
+							"   \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{tokenAuth}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"comentario\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/publicaciones/35/comentarios",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"publicaciones",
+						"35",
+						"comentarios"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
