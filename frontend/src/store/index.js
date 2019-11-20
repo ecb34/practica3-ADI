@@ -5,15 +5,15 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 
-export const store = new Vuex.Store({
+export default new Vuex.Store({
 
-    State: {
+    state: {
         token : localStorage.getItem('token') || null
 
     },
     //Getters are function which consult the variables of the state.
     getters: {
-        loggedIn(){
+        loggedIn(state){
             return state.token !==null
         }
     },
@@ -29,7 +29,7 @@ export const store = new Vuex.Store({
     actions: {
         getToken(context, credentials){
             return new Promise((resolve,reject) =>{
-                axios.post('/login', {
+                axios.post('/api/login', {
                     nombre: credentials.nombre,
                     password: credentials.password
                 }).then(response =>{

@@ -1,13 +1,13 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="calories"
+    :items="publicaciones"
+    sort-by="id"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-toolbar-title>Lista Publicaciones</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -16,7 +16,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on">Nueva Publicación</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -27,19 +27,12 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                    <v-text-field v-model="editedItem.titulo" label="Titulo" loading="true"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-textarea v-model="editedItem.contenido" label="Contenido" loading="true"></v-textarea>
                   </v-col>
                 </v-row>
               </v-container>
@@ -47,71 +40,70 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.action="{ item }">
+    <template v-slot:item.accion="{ item }">
+      <v-icon      
+        class="mr-2"
+        @click="viewItem(item)"
+      >
+        mdi-eye
+      </v-icon>
       <v-icon
-        small
+        
         class="mr-2"
         @click="editItem(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
-        small
+        
         @click="deleteItem(item)"
       >
         mdi-delete
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <v-btn color="primary" @click="initialize">Recargar</v-btn>
     </template>
   </v-data-table>
 </template>
 
-<script>
+<script>//TODO: crear para ver publicacion una vista en especial que se acceda por publicaciones/{id}
+  import axios from 'axios'
   export default {
     data: () => ({
+      //modal
       dialog: false,
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'id',
           align: 'left',
-          sortable: false,
-          value: 'name',
+          value: 'id',
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', value: 'action', sortable: false },
+        { text: 'Titulo', value: 'titulo' },
+        { text: 'Contenido', value: 'contenido' },
+        { text: 'Acciones', value: 'accion', sortable: false },
       ],
-      desserts: [],
+      publicaciones: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        titulo: '',
+        contenido: '',
       },
       defaultItem: {
         name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        contenido: ''
       },
     }),
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Nueva Publicación' : 'Editar Publicación'
       },
     },
     watch: {
@@ -124,103 +116,42 @@
     },
     methods: {
       initialize () {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-          },
-        ]
+        axios.get('/api/publicaciones').then((res)=>{//TODO toca hacer catch? o no lo detectaria como error? mirar practica taes
+          this.publicaciones = res.data;
+        })
       },
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
+      editItem (item) { //para mostrar modal de editar publicacion
+        this.editedIndex = this.publicaciones.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-      deleteItem (item) {
-        const index = this.desserts.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      deleteItem (item) {//TODO llamada con axios al servidor y crearle un modal para el delete
+        const index = this.publicaciones.indexOf(item)
+        confirm('Are you sure you want to delete this item?') && this.publicaciones.splice(index, 1)
       },
-      close () {
-        this.dialog = false
+      close () {//cerrar modal
+        this.dialog = false 
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedItem = Object.assign({}, this.defaultItem) //se vacia el modal
           this.editedIndex = -1
         }, 300)
       },
-      save () {
+      save () {//guardar nuevo objeto o el objeto editado
         if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          Object.assign(this.publicaciones[this.editedIndex], this.editedItem)//TODO hacer llamada con axios a editPublicacion
         } else {
-          this.desserts.push(this.editedItem)
+          axios.post('/api/publicaciones', {
+            titulo: this.editItem.titulo,
+            contenido: this.editItem.contenido
+          }).then((res)=>{//TODO la peticion necesitaba el token? necesito hacer catch?
+            if(res.status)
+            this.publicaciones.push(this.editedItem)
+          })
+          
         }
         this.close()
       },
     },
   }
 </script>
+
