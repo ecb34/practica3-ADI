@@ -15,6 +15,9 @@ export default new Vuex.Store({
     getters: {
         loggedIn(state){
             return state.token !==null
+        },
+        getToken(state){
+            return state.token
         }
     },
 
@@ -27,7 +30,7 @@ export default new Vuex.Store({
 
     //Actions are asynchronous operations which can modify the application's state or call the mutations, they're normally used for axios requests.
     actions: {
-        getToken(context, credentials){
+        Authenticate(context, credentials){
             return new Promise((resolve,reject) =>{
                 axios.post('/api/login', {
                     nombre: credentials.nombre,

@@ -140,15 +140,16 @@
         if (this.editedIndex > -1) {
           Object.assign(this.publicaciones[this.editedIndex], this.editedItem)//TODO hacer llamada con axios a editPublicacion
         } else {
-          axios.post('/api/publicaciones', {
-            titulo: this.editItem.titulo,
-            contenido: this.editItem.contenido
-          }).then((res)=>{//TODO la peticion necesitaba el token? necesito hacer catch?
-            if(res.status)
-            this.publicaciones.push(this.editedItem)
-          })
-          
-        }
+            axios.post('/api/publicaciones', {
+              titulo: this.editItem.titulo,
+              contenido: this.editItem.contenido
+            }).then(()=>{//TODO peticion necesita token
+              this.publicaciones.push(this.editedItem)
+            }).catch(()=>{//cuando es codigo peticion diferente a 2xx
+              //TODO cambiar a que muestre un mensaje de error
+              this.publicaciones = []
+            })
+          }
         this.close()
       },
     },
