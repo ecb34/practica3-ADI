@@ -93,10 +93,12 @@
       publicaciones: [],
       editedIndex: -1,
       editedItem: {
+        id: -1,
         titulo: '',
         contenido: '',
       },
       defaultItem: {
+        id: -1,
         name: '',
         contenido: ''
       },
@@ -116,18 +118,23 @@
     },
     methods: {
       initialize () {
-        axios.get('/api/publicaciones').then((res)=>{//TODO toca hacer catch? o no lo detectaria como error? mirar practica taes
+        axios.get('/api/publicaciones').then((res)=>{//TODO axios toma todo como error que no sea 200, hacer peticiones segun esto
           this.publicaciones = res.data;
         })
       },
       editItem (item) { //para mostrar modal de editar publicacion
-        this.editedIndex = this.publicaciones.indexOf(item)
+        this.editedIndex = item.id
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
       deleteItem (item) {//TODO llamada con axios al servidor y crearle un modal para el delete
-        const index = this.publicaciones.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.publicaciones.splice(index, 1)
+        axios.delete('/api/publicaciones'+ item.id).then(()=>{//TODO verificar
+          this.publicaciones.splice(this.publicaciones.indexOf(item), 1)//quitarlo de la lista dinamicamente
+          //TODO mostrar con vuetoasted mensaje borrado exitoso
+        }).catch(()=>{
+          //TODO mostrar con vuetoasted un mensaje de error al borrar
+        })
+        
       },
       close () {//cerrar modal
         this.dialog = false 
@@ -137,7 +144,11 @@
         }, 300)
       },
       save () {//guardar nuevo objeto o el objeto editado
-        if (this.editedIndex > -1) {
+        if (this.editedIndex > -1) {//TODO poner el index segun la base de datos
+          axios.put('/api/publicaciones/'+ this.editedItem.id, {
+            titulo: this.editedItem.titulo,
+            contenido: this.editedItem.contenido
+          })
           Object.assign(this.publicaciones[this.editedIndex], this.editedItem)//TODO hacer llamada con axios a editPublicacion
         } else {
             axios.post('/api/publicaciones', {
@@ -147,7 +158,7 @@
               this.publicaciones.push(this.editedItem)
             }).catch(()=>{//cuando es codigo peticion diferente a 2xx
               //TODO cambiar a que muestre un mensaje de error
-              this.publicaciones = []
+              this.publicaciones = [] //? quitar esto
             })
           }
         this.close()
