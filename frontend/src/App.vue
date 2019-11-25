@@ -9,14 +9,10 @@
         <h2>Práctica 3 ADI</h2>
       </div>
       <v-spacer></v-spacer>
-      <v-btn
-        href=""
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Login</span>
+      <router-link to="/login">
+        <span class="mr-2 text--white">Login</span>
         <v-icon>mdi-login</v-icon>
-      </v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-content>

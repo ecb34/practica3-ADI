@@ -16,7 +16,7 @@ new Vue({
   vuetify,
   store,
   mounted(){
-    axios.interceptors.request.use(async config => {//TODO verificar
+    axios.interceptors.request.use(async config => {//TODO verificar que va bien
       const token = store.getters.getToken;
       if (token) {
         config.headers.Authorization = token;

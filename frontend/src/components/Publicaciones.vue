@@ -144,7 +144,7 @@
         }, 300)
       },
       save () {//guardar nuevo objeto o el objeto editado
-        if (this.editedIndex > -1) {//TODO poner el index segun la base de datos
+        if (this.editedIndex > -1) {
           axios.put('/api/publicaciones/'+ this.editedItem.id, {
             titulo: this.editedItem.titulo,
             contenido: this.editedItem.contenido

@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
     state: {
-        token : localStorage.getItem('token') || null
+        token : null
 
     },
     //Getters are function which consult the variables of the state.
@@ -30,14 +30,13 @@ export default new Vuex.Store({
 
     //Actions are asynchronous operations which can modify the application's state or call the mutations, they're normally used for axios requests.
     actions: {
-        Authenticate(context, credentials){
+        authenticate(context, credentials){
             return new Promise((resolve,reject) =>{
                 axios.post('/api/login', {
                     nombre: credentials.nombre,
                     password: credentials.password
                 }).then(response =>{
                     var token = response.data.token
-                    localStorage.setItem('token', token)
                     context.commit('setToken', token)
                     resolve(true)
                 }).catch(error =>{
