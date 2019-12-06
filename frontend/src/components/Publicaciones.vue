@@ -48,12 +48,14 @@
       </v-toolbar>
     </template>
     <template v-slot:item.accion="{ item }">
-      <v-icon      
-        class="mr-2"
-        @click="viewItem(item)"
-      >
-        mdi-eye
-      </v-icon>
+      <router-link :to="{ name: 'publicacion', params: {id: item.id } }">
+        <v-icon      
+          class="mr-2"
+          @click="viewItem(item)"
+        >
+          mdi-eye
+        </v-icon>
+      </router-link>
       <v-icon
         
         class="mr-2"
@@ -126,7 +128,7 @@
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-      deleteItem (item) {//TODO llamada con axios al servidor y crearle un modal para el delete
+      deleteItem (item) {
         axios.delete('/api/publicaciones/'+ item.id).then((res)=>{
           this.publicaciones.splice(this.publicaciones.indexOf(item), 1)//quitarlo de la lista dinamicamente
           this.$toasted.show("Borrada la publicación "+ item.id, { 

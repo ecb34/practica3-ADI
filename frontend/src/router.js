@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Publicaciones from './components/Publicaciones'
+import Publicacion from './components/DetallePublicacion'
 import Home from './components/Home'
 import Login from './components/Login'
 import Usuarios from './components/Usuarios'
@@ -32,6 +33,18 @@ export default new Router({
             path: '/publicaciones',
             name: 'publicaciones',
             component: Publicaciones,
+            beforeEnter(to,from,next){
+                if(Store.getters.loggedIn){
+                    next()
+                }else{
+                    next({name: 'Login'})
+                }
+            }
+        },
+        {
+            path: '/publicaciones/:id',
+            name: 'publicacion',
+            component: Publicacion,
             beforeEnter(to,from,next){
                 if(Store.getters.loggedIn){
                     next()
