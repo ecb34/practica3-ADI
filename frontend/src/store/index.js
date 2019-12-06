@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
     state: {
-        token : null
+        token : localStorage.getItem('token') || null
 
     },
     //Getters are function which consult the variables of the state.
@@ -25,6 +25,10 @@ export default new Vuex.Store({
     mutations: {
         setToken(state, token){
             state.token = token
+        },
+        logout(state){
+            state.token = null;
+            localStorage.setItem('token', '');
         }
     },
 
@@ -37,6 +41,7 @@ export default new Vuex.Store({
                     password: credentials.password
                 }).then(response =>{
                     var token = response.data.token
+                    localStorage.setItem('token', token)
                     context.commit('setToken', token)
                     resolve(true)
                 }).catch(error =>{

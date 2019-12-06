@@ -2,14 +2,16 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="red"
       dark
     >
       <div class="d-flex align-center">
-        <h2>Práctica 3 ADI</h2>
+        <router-link to="/" tag="button">Práctica 3 ADI</router-link>
       </div>
       <v-spacer></v-spacer>
-      <router-link to="/login">
+
+      <v-btn v-if="this.$store.getters.loggedIn" @click="logout()">Logout</v-btn>
+      <router-link to="/login" v-else tag="button">
         <span class="mr-2 text--white">Login</span>
         <v-icon>mdi-login</v-icon>
       </router-link>
@@ -29,5 +31,16 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    logout(){
+      this.$store.commit('logout');
+      this.$router.push('/')
+      this.$toasted.show("Cerrada sesión correctamente", { 
+        theme: "toasted-primary", 
+        position: "top-center", 
+        duration : 2000
+      });
+    }
+  }
 };
 </script>

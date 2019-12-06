@@ -43,7 +43,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="submit">Login</v-btn>
+                <v-btn  @click="submit">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -54,6 +54,7 @@
 
 <script>
 export default {
+    name: 'Login',
     data: ()=> ({
         credentials: {
             nombre: '',
@@ -64,8 +65,8 @@ export default {
     methods: {
         submit(){
             this.$store.dispatch('authenticate', this.credentials).then(()=>{
-            this.$router.push('/publicaciones')
-            }).catch(()=>{//TODO show error messages
+              this.$router.push('/publicaciones')
+            }).catch(()=>{
                 this.$toasted.show("Error de credenciales", { 
                     theme: "toasted-primary", 
                     position: "top-center", 

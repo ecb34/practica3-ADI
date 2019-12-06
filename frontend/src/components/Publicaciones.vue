@@ -145,20 +145,47 @@
       },
       save () {//guardar nuevo objeto o el objeto editado
         if (this.editedIndex > -1) {
-          axios.put('/api/publicaciones/'+ this.editedItem.id, {
+          axios.patch('/api/publicaciones/'+ this.editedItem.id, {
             titulo: this.editedItem.titulo,
             contenido: this.editedItem.contenido
-          })
-          Object.assign(this.publicaciones[this.editedIndex], this.editedItem)//TODO hacer llamada con axios a editPublicacion
+          }).then(()=>{
+            for (var publicacion of this.publicaciones) {
+              if(publicacion.id === this.editedIndex){
+                publicacion.titulo = this.editedItem.titulo;
+                publicacion.contenido = this.editedItem.contenido;
+              }
+            }
+            this.$toasted.show("Editada la publicación "+ this.editedItem.id, { 
+              theme: "toasted-primary", 
+              position: "top-center", 
+              duration : 2000
+            });
+          }).catch((err)=>{
+            this.$toasted.show(err, { 
+              theme: "toasted-primary", 
+              position: "top-center", 
+              duration : 2000
+            });
+            console.log(err);
+          })    
         } else {
             axios.post('/api/publicaciones', {
-              titulo: this.editItem.titulo,
-              contenido: this.editItem.contenido
-            }).then(()=>{//TODO peticion necesita token
-              this.publicaciones.push(this.editedItem)
-            }).catch(()=>{//cuando es codigo peticion diferente a 2xx
-              //TODO cambiar a que muestre un mensaje de error
-              this.publicaciones = [] //? quitar esto
+              titulo: this.editedItem.titulo,
+              contenido: this.editedItem.contenido
+            }).then((res)=>{
+              this.publicaciones.push(res.data);
+              this.$toasted.show("Agregada la publicación con id "+ res.data.id, { 
+                theme: "toasted-primary", 
+                position: "top-center", 
+                duration : 2000
+              });
+            }).catch((err)=>{//cuando es codigo peticion diferente a 2xx
+              console.log(err);
+              this.$toasted.show("Editada la publicación "+ this.publicaciones[this.editedIndex].id, { 
+                theme: "toasted-primary", 
+                position: "top-center", 
+                duration : 2000
+              });
             })
           }
         this.close()
