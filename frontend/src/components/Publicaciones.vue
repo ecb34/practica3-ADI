@@ -62,7 +62,6 @@
         mdi-pencil
       </v-icon>
       <v-icon
-        
         @click="deleteItem(item)"
       >
         mdi-delete
@@ -74,7 +73,7 @@
   </v-data-table>
 </template>
 
-<script>//TODO: crear para ver publicacion una vista en especial que se acceda por publicaciones/{id}
+<script>
   import axios from 'axios'
   export default {
     data: () => ({
@@ -118,7 +117,7 @@
     },
     methods: {
       initialize () {
-        axios.get('/api/publicaciones').then((res)=>{//TODO axios toma todo como error que no sea 200, hacer peticiones segun esto
+        axios.get('/api/publicaciones').then((res)=>{
           this.publicaciones = res.data;
         })
       },
@@ -128,11 +127,19 @@
         this.dialog = true
       },
       deleteItem (item) {//TODO llamada con axios al servidor y crearle un modal para el delete
-        axios.delete('/api/publicaciones'+ item.id).then(()=>{//TODO verificar
+        axios.delete('/api/publicaciones/'+ item.id).then((res)=>{
           this.publicaciones.splice(this.publicaciones.indexOf(item), 1)//quitarlo de la lista dinamicamente
-          //TODO mostrar con vuetoasted mensaje borrado exitoso
-        }).catch(()=>{
-          //TODO mostrar con vuetoasted un mensaje de error al borrar
+          this.$toasted.show("Borrada la publicación "+ item.id, { 
+                theme: "toasted-primary", 
+                position: "top-center", 
+                duration : 2000
+              });
+        }).catch((err)=>{
+          this.$toasted.show(err.response.data.error, { 
+                theme: "toasted-primary", 
+                position: "top-center", 
+                duration : 2000
+              });
         })
         
       },
@@ -144,7 +151,7 @@
         }, 300)
       },
       save () {//guardar nuevo objeto o el objeto editado
-        if (this.editedIndex > -1) {
+        if (this.editedIndex > -1) {//editar
           axios.patch('/api/publicaciones/'+ this.editedItem.id, {
             titulo: this.editedItem.titulo,
             contenido: this.editedItem.contenido
@@ -161,14 +168,13 @@
               duration : 2000
             });
           }).catch((err)=>{
-            this.$toasted.show(err, { 
+            this.$toasted.show(err.response.data.error, { 
               theme: "toasted-primary", 
               position: "top-center", 
               duration : 2000
             });
-            console.log(err);
           })    
-        } else {
+        } else {//crear
             axios.post('/api/publicaciones', {
               titulo: this.editedItem.titulo,
               contenido: this.editedItem.contenido
@@ -180,8 +186,7 @@
                 duration : 2000
               });
             }).catch((err)=>{//cuando es codigo peticion diferente a 2xx
-              console.log(err);
-              this.$toasted.show("Editada la publicación "+ this.publicaciones[this.editedIndex].id, { 
+              this.$toasted.show(err.response.data.error, { 
                 theme: "toasted-primary", 
                 position: "top-center", 
                 duration : 2000
