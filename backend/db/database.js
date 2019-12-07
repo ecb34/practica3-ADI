@@ -295,7 +295,7 @@ const createGroup = (req, res) => {
 
 /**************** USUARIOS ************************/
 const getUsuarios = (req, res) => {
-  pool.query('SELECT nombre,popularidad FROM usuario ORDER BY popularidad DESC', (error, results) => {
+  pool.query('SELECT id,nombre,popularidad,alias FROM usuario ORDER BY popularidad DESC', (error, results) => {
     if (error) {
       res.status(500).send({
         error: "error interno"
@@ -327,7 +327,12 @@ const updateUsuario = (req, res) => {
       let popularidad = req.body.popularidad
       let query
       let values
-      if (popularidad > 100 || popularidad < 0) popularidad = undefined //si se da mal, no actualizar la popularidad
+      if (popularidad > 100 || popularidad < 0){
+        res.status(400).send({
+          error: 'Popularidad debe estar entre 0 y 100'
+        })
+        return
+      } 
       if (alias && popularidad) {
         query = 'UPDATE usuario SET alias = $1, popularidad = $2 where nombre = $3'
         values = [alias, popularidad, nombre]

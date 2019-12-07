@@ -3,11 +3,14 @@
          <v-row>
           <v-col cols="12">
                <v-row align="center" justify="center" class="grey lighten-5" style="height: 300px;">
-                    <router-link to="/publicaciones" tag="button">
-                         <v-btn x-large color="info" dark>
-                              Ver Publicaciones
-                         </v-btn>
-                    </router-link>
+                    <v-btn to="/publicaciones" x-large color="info" dark>
+                         Ver Publicaciones
+                    </v-btn>
+               </v-row>
+               <v-row align="center" justify="center" class="grey lighten-5" >
+                         <v-btn to="/usuarios" x-large color="green" dark>
+                              Ver Usuarios
+                         </v-btn>    
                </v-row>
           </v-col>
          </v-row>

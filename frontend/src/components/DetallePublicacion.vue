@@ -12,7 +12,7 @@
             <dt>Imagen:</dt>
             <dd><img :src="publicacion.imagen" alt="imagen"></dd>          
         </dl>
-        <router-link to="/publicaciones">Volver</router-link>
+        <v-btn color="blue" to="/usuarios" class="white--text">Volver</v-btn>
     </div>
     
 </template>

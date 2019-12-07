@@ -66,8 +66,9 @@ export default {
         submit(){
             this.$store.dispatch('authenticate', this.credentials).then(()=>{
               this.$router.push('/publicaciones')
-            }).catch(()=>{
-                this.$toasted.show("Error de credenciales", { 
+            }).catch((err)=>{
+              console.log(err)
+                this.$toasted.show(err.response.data.error, { 
                     theme: "toasted-primary", 
                     position: "top-center", 
                     duration : 2000

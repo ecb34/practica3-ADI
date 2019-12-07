@@ -29,7 +29,7 @@ export default new Vuex.Store({
         setToken(state, token){
             state.token = token
         },
-        setItem(state,id){
+        setId(state,id){
             state.id = id
         },
         logout(state){
@@ -51,7 +51,7 @@ export default new Vuex.Store({
                     localStorage.setItem('token', token)
                     localStorage.setItem('id', id)
                     context.commit('setToken', token)
-                    localStorage.commit('setId', id)
+                    context.commit('setId', id)
                     resolve(true)
                 }).catch(error =>{
                     reject(error)

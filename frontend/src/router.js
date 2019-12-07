@@ -5,6 +5,7 @@ import Publicacion from './components/DetallePublicacion'
 import Home from './components/Home'
 import Login from './components/Login'
 import Usuarios from './components/Usuarios'
+import Usuario from './components/DetalleUsuario'
 import Store from './store/index';
 
 Vue.use(Router);
@@ -57,6 +58,18 @@ export default new Router({
             path: '/usuarios',
             name: 'usuarios',
             component: Usuarios,
+            beforeEnter(to,from,next){
+                if(Store.getters.loggedIn){
+                    next()
+                }else{
+                    next({name: 'Login'})
+                }
+            }
+        },
+        {
+            path: '/usuarios/:nombre',
+            name: 'usuario',
+            component: Usuario,
             beforeEnter(to,from,next){
                 if(Store.getters.loggedIn){
                     next()

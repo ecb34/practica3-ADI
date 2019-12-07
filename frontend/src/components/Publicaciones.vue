@@ -1,18 +1,9 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="publicaciones"
-    sort-by="id"
-    class="elevation-1"
-  >
+  <v-data-table :headers="headers" :items="publicaciones" sort-by="id" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>Lista Publicaciones</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
@@ -49,23 +40,14 @@
     </template>
     <template v-slot:item.accion="{ item }">
       <router-link :to="{ name: 'publicacion', params: {id: item.id } }">
-        <v-icon      
-          class="mr-2"
-          @click="viewItem(item)"
-        >
+        <v-icon class="mr-2">
           mdi-eye
         </v-icon>
       </router-link>
-      <v-icon
-        
-        class="mr-2"
-        @click="editItem(item)"
-      >
+      <v-icon class="mr-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon
-        @click="deleteItem(item)"
-      >
+      <v-icon @click="deleteItem(item)">
         mdi-delete
       </v-icon>
     </template>
