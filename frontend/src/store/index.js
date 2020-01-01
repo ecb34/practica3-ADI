@@ -34,7 +34,7 @@ export default new Vuex.Store({
         },
         logout(state){
             state.token = null;
-            localStorage.setItem('token', '');
+            localStorage.removeItem('token')
         }
     },
 

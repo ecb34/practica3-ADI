@@ -1,4 +1,5 @@
 <template>
+  <v-container>
     <v-data-table :headers="headers" :items="usuarios" sort-by="id" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -39,22 +40,27 @@
       </v-toolbar>
     </template>
     <template v-slot:item.accion="{ item }">
-      <router-link :to="{ name: 'usuario', params: {nombre: item.nombre } }">
+      <v-btn text icon :to="{ name: 'usuario', params: {nombre: item.nombre } }" color="success">
         <v-icon class="mr-2">
           mdi-eye
         </v-icon>
-      </router-link>
-      <v-icon class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
+      </v-btn>
+      <v-btn text icon @click="editItem(item)" color="primary">
+        <v-icon class="mr-2" >
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+      <v-btn text icon @click="deleteItem(item)" color="error">
+        <v-icon >
+          mdi-delete
+        </v-icon>
+      </v-btn>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Recargar</v-btn>
     </template>
   </v-data-table>
+  </v-container>
 </template>
 
 <script>
@@ -180,5 +186,4 @@ export default {
 </script>
 
 <style>
-
 </style>

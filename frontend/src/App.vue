@@ -10,7 +10,12 @@
       </div>
       <v-spacer></v-spacer>
 
-      <v-btn v-if="this.$store.getters.loggedIn" @click="logout()">Logout</v-btn>
+      <div v-if="this.$store.getters.loggedIn">
+        <v-btn text color="white" to="/publicaciones">Publicaciones</v-btn>
+        <v-btn text color="white" to="/usuarios">Usuarios</v-btn>
+        <v-btn  @click="logout()">Logout</v-btn>
+      </div>
+      
       <router-link to="/login" v-else tag="button">
         <span class="mr-2 text--white">Login</span>
         <v-icon>mdi-login</v-icon>

@@ -67,7 +67,6 @@ export default {
             this.$store.dispatch('authenticate', this.credentials).then(()=>{
               this.$router.push('/publicaciones')
             }).catch((err)=>{
-              console.log(err)
                 this.$toasted.show(err.response.data.error, { 
                     theme: "toasted-primary", 
                     position: "top-center", 

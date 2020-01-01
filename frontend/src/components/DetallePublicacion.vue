@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-container>
         <dl>
             <dt>ID:</dt>
             <dd>{{publicacion.id}}</dd>
@@ -12,8 +12,8 @@
             <dt>Imagen:</dt>
             <dd><img :src="publicacion.imagen" alt="imagen"></dd>          
         </dl>
-        <v-btn color="blue" to="/usuarios" class="white--text">Volver</v-btn>
-    </div>
+        <v-btn color="red" to="/usuarios" class="white--text">Volver</v-btn>
+    </v-container>
     
 </template>
 
@@ -50,7 +50,7 @@ dl {
 }
  
 dl dt {
-    background:#5f9be3;
+    background:red;
     color:#fff;
     float:left; 
     font-weight:bold; 

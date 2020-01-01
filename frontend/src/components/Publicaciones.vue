@@ -1,4 +1,5 @@
 <template>
+  <v-container>
   <v-data-table :headers="headers" :items="publicaciones" sort-by="id" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -39,22 +40,27 @@
       </v-toolbar>
     </template>
     <template v-slot:item.accion="{ item }">
-      <router-link :to="{ name: 'publicacion', params: {id: item.id } }">
+      <v-btn text icon :to="{ name: 'publicacion', params: {id: item.id } }" color="success">
         <v-icon class="mr-2">
           mdi-eye
         </v-icon>
-      </router-link>
-      <v-icon class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
+      </v-btn>
+      <v-btn text icon @click="editItem(item)" color="primary">
+        <v-icon class="mr-2" >
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+      <v-btn text icon @click="deleteItem(item)" v-if="item.autor_id == $store.getters.getId" color="error">
+        <v-icon >
+          mdi-delete
+        </v-icon>
+      </v-btn>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Recargar</v-btn>
     </template>
   </v-data-table>
+  </v-container>
 </template>
 
 <script>
@@ -64,14 +70,10 @@
       //modal
       dialog: false,
       headers: [
-        {
-          text: 'id',
-          align: 'left',
-          value: 'id',
-        },
-        { text: 'Titulo', value: 'titulo' },
-        { text: 'Contenido', value: 'contenido' },
-        { text: 'Acciones', value: 'accion', sortable: false },
+        { text: 'ID', value: 'id', width: '10%'},
+        { text: 'Titulo', value: 'titulo'},
+        { text: 'Contenido', value: 'contenido'},
+        { text: 'Acciones', value: 'accion', sortable: false,  width: '15%' },
       ],
       publicaciones: [],
       editedIndex: -1,
@@ -182,4 +184,5 @@
     },
   }
 </script>
+
 
