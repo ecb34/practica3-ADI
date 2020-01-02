@@ -1,0 +1,20 @@
+PARTES OPTATIVAS REALIZADAS:
+
+-Estructura proyecto vue-CLI
+-Usado framework Vuetify
+-Funcionalidad ver detalles
+-Implementado listado de otro recurso (usuarios) incluyendo ver detalles y eliminar
+-Edición de datos para usuarios y publicaciones
+-Usado Vuex para centralizar el estado (solo usado para estado de autenticación)
+-Usado Vue Router
+
+
+Para desplegar el servidor con la base de datos migrada y con sus seeders hacer lo mismo que en la práctica 1:
+
+-Crear base de datos en postgres
+-En config/default.json poner la información para conexion a bd
+-npm run migrate up
+-Para poblar base de datos: en db/database.js en la línea 8 poner los datos de la conexión a bd
+-en config.env poner POBLAR = true
+-Al poner en marcha el servidor se hará la población de la bd
+-Si se quieren borrar todas las tablas, usar npm run migrate down
